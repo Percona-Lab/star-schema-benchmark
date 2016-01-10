@@ -21,7 +21,7 @@ val LineOrderSchema = StructType(Seq(
     StructField("TMP", StringType, true)
     ))
 
-val d1 = sqlContext.read.format("com.databricks.spark.csv").option("header", "false").option("delimiter","|").option("inferSchema","true").option("quote",null).schema(customSchema).load("/mnt/md0/ssb/lineorder.tbl")
+val dLineOrderSchema = sqlContext.read.format("com.databricks.spark.csv").option("header", "false").option("delimiter","|").option("inferSchema","true").option("quote",null).schema(customSchema).load("/mnt/md0/ssb/lineorder.tbl")
 
 
 val DateSchema = StructType(Seq(
@@ -45,7 +45,7 @@ val DateSchema = StructType(Seq(
     StructField("TMP", StringType, true)
     ))
 
-val d2 = sqlContext.read.format("com.databricks.spark.csv").option("header", "false").option("delimiter","|").option("inferSchema","true").option("quote",null).schema(DateSchema).load("/mnt/md0/ssb/date.tbl")
+val dDateSchema = sqlContext.read.format("com.databricks.spark.csv").option("header", "false").option("delimiter","|").option("inferSchema","true").option("quote",null).schema(DateSchema).load("/mnt/md0/ssb/date.tbl")
 
 val PartSchema = StructType(Seq(
     StructField("P_PARTKEY", IntegerType, true),
@@ -60,7 +60,7 @@ val PartSchema = StructType(Seq(
     StructField("TMP", StringType, true)
     ))
 
-val d2 = sqlContext.read.format("com.databricks.spark.csv").option("header", "false").option("delimiter","|").option("inferSchema","true").option("quote",null).schema(PartSchema).load("/mnt/md0/ssb/part.tbl")
+val dPartSchema = sqlContext.read.format("com.databricks.spark.csv").option("header", "false").option("delimiter","|").option("inferSchema","true").option("quote",null).schema(PartSchema).load("/mnt/md0/ssb/part.tbl")
 
 val SUPPLIERSchema = StructType(Seq(
     StructField("S_SUPPKEY", IntegerType, true),
@@ -90,9 +90,9 @@ val CustomerSchema = StructType(Seq(
 val dCustomer = sqlContext.read.format("com.databricks.spark.csv").option("header", "false").option("delimiter","|").option("inferSchema","true").option("quote",null).schema(CustomerSchema).load("/mnt/md0/ssb/customer.tbl")
 
 
-d1.write.parquet("/mnt/i3600/spark/ssb")
-d2.write.parquet("/mnt/i3600/spark/ssb-date")
-d2.write.parquet("/mnt/i3600/spark/ssb-part")
+dLineOrderSchema.write.parquet("/mnt/i3600/spark/ssb")
+dDateSchema.write.parquet("/mnt/i3600/spark/ssb-date")
+dPartSchema.write.parquet("/mnt/i3600/spark/ssb-part")
 dSUPPLIER.write.parquet("/mnt/i3600/spark/ssb-supplier")
 dCustomer.write.parquet("/mnt/i3600/spark/ssb-customer")
 
