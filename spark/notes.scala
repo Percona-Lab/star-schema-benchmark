@@ -21,6 +21,9 @@ val LineOrderSchema = StructType(Seq(
     StructField("TMP", StringType, true)
     ))
 
+val d1 = sqlContext.read.format("com.databricks.spark.csv").option("header", "false").option("delimiter","|").option("inferSchema","true").option("quote",null).schema(customSchema).load("/mnt/md0/ssb/lineorder.tbl")
+
+
 val DateSchema = StructType(Seq(
     StructField("D_DATEKEY", IntegerType, true),
     StructField("D_DATE", StringType, true),
