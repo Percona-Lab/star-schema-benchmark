@@ -21,7 +21,7 @@ val LineOrderSchema = StructType(Seq(
     StructField("TMP", StringType, true)
     ))
 
-val dLineOrderSchema = sqlContext.read.format("com.databricks.spark.csv").option("header", "false").option("delimiter","|").option("inferSchema","true").option("quote",null).schema(customSchema).load("/mnt/md0/ssb/lineorder.tbl")
+val dLineOrderSchema = sqlContext.read.format("com.databricks.spark.csv").option("header", "false").option("delimiter","|").option("inferSchema","true").option("quote",null).schema(LineOrderSchema).load("/mnt/md0/ssb/lineorder.tbl")
 
 
 val DateSchema = StructType(Seq(
@@ -66,7 +66,7 @@ val SUPPLIERSchema = StructType(Seq(
     StructField("S_SUPPKEY", IntegerType, true),
     StructField("S_NAME", StringType, true),
     StructField("S_ADDRESS", StringType, true),
-    StructField("S_NATION_PREFIX", StringType, true),
+    StructField("S_CITY", StringType, true),
     StructField("S_NATION", StringType, true),
     StructField("S_REGION", StringType, true),
     StructField("S_PHONE", StringType, true),
@@ -79,7 +79,7 @@ val CustomerSchema = StructType(Seq(
     StructField("C_CUSTKEY", IntegerType, true),
     StructField("C_NAME", StringType, true),
     StructField("C_ADDRESS", StringType, true),
-    StructField("C_NATION_PREFIX", StringType, true),
+    StructField("C_CITY", StringType, true),
     StructField("C_NATION", StringType, true),
     StructField("C_REGION", StringType, true),
     StructField("C_PHONE", StringType, true),
@@ -127,5 +127,6 @@ val sql23=sqlContext.sql("select sum(LO_REVENUE), D_YEAR, P_BRAND1 from lineorde
 
 val sql31=sqlContext.sql("select C_NATION, S_NATION, D_YEAR, sum(LO_REVENUE) as revenue from customer, lineorder, supplier, date where LO_CUSTKEY = C_CUSTKEY and LO_SUPPKEY = S_SUPPKEY and LO_ORDERDATE = D_DATEKEY and C_REGION = 'ASIA' and S_REGION = 'ASIA' and D_YEAR >= 1992 and D_YEAR <= 1997 group by C_NATION, S_NATION, D_YEAR order by D_YEAR asc, revenue desc")
 
+val sql32=sqlContext.sql("select C_CITY, S_CITY, D_YEAR, sum(LO_REVENUE) as revenue from customer, lineorder, supplier, date where LO_CUSTKEY = C_CUSTKEY and LO_SUPPKEY = S_SUPPKEY and LO_ORDERDATE = D_DATEKEY and C_NATION = 'UNITED STATES' and S_NATION = 'UNITED STATES' and D_YEAR >= 1992 and D_YEAR <= 1997 group by C_CITY, S_CITY, D_YEAR order by D_YEAR asc, revenue desc")
 
 
