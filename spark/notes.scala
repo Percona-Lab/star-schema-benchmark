@@ -110,7 +110,6 @@ pDate.registerTempTable("date")
 pPart.registerTempTable("part")
 pSupplier.registerTempTable("supplier")
 pCustomer.registerTempTable("customer")
-
 val sql=sqlContext.sql("select sum(LO_EXTENDEDPRICE*LO_DISCOUNT) as revenue from lineorder,date where LO_ORDERDATE = D_DATEKEY and D_YEAR = 1993 and LO_DISCOUNT between 1 and 3 and LO_QUANTITY < 25")
 
 val sql=sqlContext.sql("select sum(LO_EXTENDEDPRICE*LO_DISCOUNT) as revenue from lineorder,date where LO_ORDERDATE = D_DATEKEY and D_YEARMONTHNUM = 199401  and LO_DISCOUNT between 4 and 6 and LO_QUANTITY between 26 and 35")
@@ -129,4 +128,8 @@ val sql31=sqlContext.sql("select C_NATION, S_NATION, D_YEAR, sum(LO_REVENUE) as 
 
 val sql32=sqlContext.sql("select C_CITY, S_CITY, D_YEAR, sum(LO_REVENUE) as revenue from customer, lineorder, supplier, date where LO_CUSTKEY = C_CUSTKEY and LO_SUPPKEY = S_SUPPKEY and LO_ORDERDATE = D_DATEKEY and C_NATION = 'UNITED STATES' and S_NATION = 'UNITED STATES' and D_YEAR >= 1992 and D_YEAR <= 1997 group by C_CITY, S_CITY, D_YEAR order by D_YEAR asc, revenue desc")
 
+val sql33=sqlContext.sql("select C_CITY, S_CITY, D_YEAR, sum(LO_REVENUE) as revenue from customer, lineorder, supplier, date where LO_CUSTKEY = C_CUSTKEY and LO_SUPPKEY = S_SUPPKEY and LO_ORDERDATE = D_DATEKEY and  (C_CITY='UNITED KI1' or C_CITY='UNITED KI5') and (S_CITY='UNITED KI1' or S_CITY='UNITED KI5') and D_YEAR >= 1992 and D_YEAR <= 1997 group by C_CITY, S_CITY, D_YEAR order by D_YEAR asc, revenue desc")
 
+val sql34=sqlContext.sql("select C_CITY, S_CITY, D_YEAR, sum(LO_REVENUE) as revenue from customer, lineorder, supplier, date where LO_CUSTKEY = C_CUSTKEY and LO_SUPPKEY = S_SUPPKEY and LO_ORDERDATE = D_DATEKEY and (C_CITY='UNITED KI1' or C_CITY='UNITED KI5')    and (S_CITY='UNITED KI1' or S_CITY='UNITED KI5')    and D_YEARMONTH = 'Dec1997'    group by C_CITY, S_CITY, D_YEAR order by D_YEAR asc, revenue desc")
+
+val sql41=sqlContext.sql("select     D_YEAR, C_NATION,    sum(LO_REVENUE - LO_SUPPLYCOST) as profit from     date, customer, supplier, part, lineorder where     LO_CUSTKEY = C_CUSTKEY    and LO_SUPPKEY = S_SUPPKEY    and LO_PARTKEY = P_PARTKEY   and LO_ORDERDATE = D_DATEKEY    and C_REGION = 'AMERICA'    and S_REGION = 'AMERICA'    and (P_MFGR = 'MFGR#1' or P_MFGR = 'MFGR#2') group by     D_YEAR, C_NATION order by     D_YEAR, C_NATION")
